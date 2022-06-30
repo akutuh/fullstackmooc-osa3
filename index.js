@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-let notes = [
+let persons = [
     {
       id: 1,
       name: "Arto Hellas",
@@ -27,7 +27,14 @@ let notes = [
 ]
 
 app.get('/api/persons', (request, response) => {
+
     response.json(notes)
+})
+
+app.get('/info', (request, response) => {
+    const count = persons.filter(person => person.id).length
+    console.log(count)
+    response.send(`Phonebook has info for ${count} people </br> ${Date()}`)
 })
 
 const PORT = 3001
