@@ -27,7 +27,7 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(notes)
+    response.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -39,6 +39,17 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end()
     }
+})
+
+app.delete('/api/persons/:number', (request, response) => {
+    const phoneNumber = request.params.number
+    console.log(phoneNumber, ' deleted')
+    persons = persons.map(person => 
+        person.number === phoneNumber
+            ? { ...person, number: ''}
+            : person
+    )
+    response.status(204).end()
 })
 
 app.get('/info', (request, response) => {
