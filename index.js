@@ -1,8 +1,7 @@
 const { response } = require('express')
 const express = require('express')
 const app = express()
-
-app.use(express.json())
+const morgan = require('morgan')
 
 let persons = [
     {
@@ -26,6 +25,12 @@ let persons = [
         number: "39-23-6423122"
     }
 ]
+
+
+app.use(express.json())
+
+app.use(morgan('tiny'))
+
 const generateId = () => {
     const id = Math.floor(Math.random() * 10000)
     return id
@@ -93,6 +98,7 @@ app.get('/info', (request, response) => {
     console.log(count)
     response.send(`Phonebook has info for ${count} people </br> ${Date()}`)
 })
+
 
 const PORT = 3001
 app.listen(PORT, () => {
