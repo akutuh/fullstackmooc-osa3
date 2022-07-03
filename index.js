@@ -21,7 +21,7 @@ app.get('/api/persons', (request, response) => {
     })
 
 })
-
+//todo 3.18
 app.get('/api/persons/:id', (request, response, next) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
@@ -44,24 +44,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    /*
-    if (persons.find(p => p.name === person.name)) {
-        console.log('name must be unique')
-        return response.status(400).json ({
-            error: 'name must be unique'
-        })
-    } else if (!person.name) {
-        console.log('name missing')
-        return response.status(400).json ({
-            error: 'name missing'
-        })
-    } else if (!person.number) {
-        console.log('number missing')
-        return response.status(400).json ({
-            error: 'number missing'
-        })
-    }
-    */
     if (body.name === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -76,6 +58,21 @@ app.post('/api/persons', (request, response) => {
     })
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+
+    const person = {
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            response.json(updatedPerson)
+        })
+        .catch(error => next(error))
+})
+
+// todo 3.18
 app.get('/info', (request, response) => {
     const count = persons.filter(person => person.id).length
     console.log(count)
