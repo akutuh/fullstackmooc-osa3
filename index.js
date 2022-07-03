@@ -23,14 +23,11 @@ app.get('/api/persons', (request, response) => {
 })
 //todo 3.18
 app.get('/api/persons/:id', (request, response, next) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    Person.findById(request.params.id)
+        .then(person => {
+            response.json(person)
+        })
+        .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -72,11 +69,12 @@ app.put('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-// todo 3.18
 app.get('/info', (request, response) => {
-    const count = persons.filter(person => person.id).length
-    console.log(count)
-    response.send(`Phonebook has info for ${count} people </br> ${Date()}`)
+    Person.countDocuments({}, function (err, count) {
+        console.log(count);
+        response.send(`Phonebook has info for ${count} people </br> ${Date()}`)
+      })
+
 })
 
 const unknownEndpoint = (request, response) => {
