@@ -39,15 +39,12 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.delete('/api/persons/:number', (request, response) => {
-    const phoneNumber = request.params.number
-    console.log(phoneNumber, ' deleted')
-    persons = persons.map(person => 
-        person.number === phoneNumber
-            ? { ...person, number: ''}
-            : person
-    )
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            console.log('deleted')
+            response.status(204).end()
+        })
 })
 
 app.post('/api/persons', (request, response) => {
