@@ -3,29 +3,10 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config()
+const Person = require('./models/person')
 
-let persons = [
-    {
-      id: 1,
-      name: "Arto Hellas",
-      number: "040-123456"
-    },
-    {
-      id: 2,
-      name: "Ada Lovelace",
-      number: "39-44-5323523"
-    },
-    {
-      id: 3,
-      name: "Dan Abramov",
-      number: "12-43-234345"
-    },
-    {
-        id: 4,
-        name: "Mary Poppendick",
-        number: "39-23-6423122"
-    }
-]
 
 app.use(express.json())
 
@@ -42,7 +23,9 @@ const generateId = () => {
 }
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -105,7 +88,7 @@ app.get('/info', (request, response) => {
 })
 
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
